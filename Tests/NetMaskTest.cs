@@ -1,0 +1,48 @@
+using Utils;
+
+namespace Tests;
+
+[TestFixture]
+[TestOf(typeof(NetMask))]
+public class NetMaskTest
+{
+    [Test]
+    // [TestCase("17.8.7.8", "17.8.0.0", "255.255.0.0")]
+    [TestCase("17.7.177.4", "17.7.160.0", "255.255.224.0")]
+    // [TestCase("144.3.133.1", "144.3.128.0", "255.255.192.0")]
+    [TestCase("255.255.255.255", "255.255.255.254", "255.255.255.254")]
+    public void TestNetMask(string interfaceAddr, string netAddress, string expected)
+    {
+        var netMask = new NetMask(InterfaceAddress.Parse(interfaceAddr), NetAddress.Parse(netAddress));
+        Assert.That(netMask.ToString(), Is.EqualTo(expected));
+    }
+
+    [Test]
+    [TestCase("17.8.7.8", "17.8.255.255", "255.255.0.0")]
+    // [TestCase("11.7.177.4", "11.7.191.255", "255.255.224.0")]
+    [TestCase("144.3.133.1", "144.3.191.255", "255.255.192.0")]
+    [TestCase("31.4.2.166", "31.4.2.167 ", "255.255.255.248")]
+    public void TestNetMaskFromIpAndBroadcast(string interfaceAddr, string broadcastAddr, string expected)
+    {
+        var netMask = new NetMask(InterfaceAddress.Parse(interfaceAddr), BroadcastAddress.Parse(broadcastAddr));
+        Assert.That(netMask.ToString(), Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void Test()
+    {
+        Assert.That(new NetMask(0xff_ff_ff_ff).fillWithOnes(32).ToString(), Is.EqualTo("255.255.255.255"));
+    }
+
+    [Test]
+    [TestCase(65_536, "255.255.0.0")]
+    [TestCase(65_530, "255.255.0.0")]
+    [TestCase(8_192, "255.255.224.0")]
+    [TestCase(16_384, "255.255.192.0")]
+    [TestCase(8, "255.255.255.248")]
+    public void TestNetMaskFromAddrCount(int addrCount, string expected)
+    {
+        var netMask = NetMask.FromAddressCount(addrCount);
+        Assert.That(netMask.ToString(), Is.EqualTo(expected));
+    }
+}
