@@ -28,7 +28,7 @@ namespace NetworkTools {
         internal static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("NetworkTools.NetworkTools", typeof(NetworkTools).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("NetworkTools.NetworkToolsGui", typeof(NetworkTools).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

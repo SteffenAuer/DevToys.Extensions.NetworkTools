@@ -22,7 +22,7 @@
         <value>Network Tools</value>
     </data>
     <data name="LongDisplayTitle" xml:space="preserve">
-        <value>Network Tools, like subnet calculator</value>
+        <value>Network Tools</value>
     </data>
     <data name="AccessibleName" xml:space="preserve">
         <value>Network Tools, like subnet calculator</value>
@@ -31,6 +31,6 @@
         <value>Network Tools, like subnet calculator</value>
     </data>
     <data name="HelloWorldLabel" xml:space="preserve">
-        <value>Hello World!</value>
+        <value>Network Tools, like subnet calculator</value>
     </data>
 </root>
