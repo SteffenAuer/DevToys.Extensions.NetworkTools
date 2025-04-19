@@ -20,7 +20,7 @@ namespace NetworkTools;
     AccessibleNameResourceName = nameof(NetworkTools.AccessibleName))]
 internal sealed class NetworkToolsGuiTool : IGuiTool
 {
-    private readonly int[] _addressCounts = new int[32];
+    private readonly long[] _addressCounts = new long[32];
     private readonly InterfaceAddress _interfaceAddress = new();
 
     private readonly IUISingleLineTextInput _outputBroadcastAddress =

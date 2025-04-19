@@ -46,7 +46,7 @@ public class NetMask(uint address) : IPv4Address(address)
 
     public int PrefixLength => _calculatePrefixLength();
 
-    public int AddressCount => (int)Math.Pow(2, 32 - PrefixLength);
+    public long AddressCount => 1L << (32 - PrefixLength);
 
     private int _calculatePrefixLength()
     {
