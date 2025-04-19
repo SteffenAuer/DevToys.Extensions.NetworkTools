@@ -31,7 +31,39 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Domain\Domain.csproj" />
+        <ProjectReference Include="..\Domain\Domain.csproj"/>
     </ItemGroup>
+
+    <PropertyGroup>
+        <!-- NuGet package -->
+        <IsPackable>true</IsPackable>
+        <Version>1.0.0</Version>
+        <Title>NetworkTools</Title>
+        <Description>Network Tools like subnet calculator</Description>
+        <!--        <PackageProjectUrl>https://my-website.com</PackageProjectUrl>-->
+        <!--        <RepositoryUrl>https://github.com/user/repository</RepositoryUrl>-->
+        <Authors>Steffen Auer</Authors>
+        <PackageTags>devtoys-app</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!--        <None Include="$(RepoRoot)LICENSE.md" Link="docs\LICENSE.md" Pack="true" PackagePath="\"/>-->
+        <!--        <None Include="$(RepoRoot)README.md" Link="docs\README.md" Pack="true" PackagePath="\"/>-->
+
+        <!-- This makes sure to include platform-specific binaries into the NuGet package, if any-->
+        <None Include="runtimes\**" Pack="true" PackagePath="\lib\net8.0\runtimes\">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <!-- This makes sure to include dependencies of the project into the NuGet package, if any -->
+    <Target Name="IncludeAllFilesInTargetDir" BeforeTargets="_GetPackageFiles">
+        <ItemGroup>
+            <None Include="$(OutputPath)\**">
+                <Pack>true</Pack>
+                <PackagePath>lib\net8.0</PackagePath>
+            </None>
+        </ItemGroup>
+    </Target>
 
 </Project>
