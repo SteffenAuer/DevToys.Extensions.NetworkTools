@@ -48,6 +48,11 @@ public class NetMask(uint address) : IPv4Address(address)
 
     public long AddressCount => 1L << (32 - PrefixLength);
 
+    public static NetMask FromPrefixLength(int prefix)
+    {
+        return new NetMask(fillWithOnes(prefix));
+    }
+
     private int _calculatePrefixLength()
     {
         var count = 0;

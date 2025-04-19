@@ -11,7 +11,7 @@ public class IPv4Address : IIPAddress
         Address = address;
     }
 
-    public uint Address { get; protected set; }
+    public uint Address { get; set; }
 
     /// <summary>
     ///     Get the specified byte from the <c>IPv4Address</c>
@@ -86,5 +86,17 @@ public class IPv4Address : IIPAddress
     private void ClearByte(int position)
     {
         Address &= ~(255u << (8 * position));
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is IPv4Address ip) return Address.Equals(ip.Address);
+
+        return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return Address.GetHashCode();
     }
 }

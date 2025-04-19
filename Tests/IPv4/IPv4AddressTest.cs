@@ -61,4 +61,10 @@ public class IPv4AddressTest
             Assert.Throws<OverflowException>(() => IPv4Address.Parse<InterfaceAddress>("256.0.0.0"));
         });
     }
+
+    [Test]
+    public void TestEquality()
+    {
+        Assert.AreEqual(new InterfaceAddress(0x11223344u), new InterfaceAddress(0x11223344u));
+    }
 }

@@ -18,10 +18,14 @@ namespace NetworkTools;
     LongDisplayTitleResourceName = nameof(NetworkTools.LongDisplayTitle),
     DescriptionResourceName = nameof(NetworkTools.Description),
     AccessibleNameResourceName = nameof(NetworkTools.AccessibleName))]
+[AcceptedDataTypeName(IPv4DataTypeDetector.IpAddressDataTypeName)]
 internal sealed class NetworkToolsGuiTool : IGuiTool
 {
-    private readonly long[] _addressCounts = new long[32];
     private readonly InterfaceAddress _interfaceAddress = new();
+    private readonly IUISingleLineTextInput[] _interfaceAddressBytes = new IUISingleLineTextInput[4];
+    private readonly IUISelectDropDownList _netMaskDropdown;
+
+    private readonly Dictionary<NetMask, IUIDropDownListItem> _netMaskDropdownItems = new();
 
     private readonly IUISingleLineTextInput _outputBroadcastAddress =
         SingleLineTextInput().ReadOnly().Title("Broadcast Address");
@@ -41,14 +45,20 @@ internal sealed class NetworkToolsGuiTool : IGuiTool
 
     public NetworkToolsGuiTool()
     {
-        for (var i = 0; i < 32; i++)
-        {
-            var mask = new NetMask(IPv4Address.fillWithOnes(i + 1));
-            _subnetOptions[31 - i] = mask;
-            _addressCounts[i] = mask.AddressCount;
-        }
+        for (var i = 0; i < 32; i++) _subnetOptions[31 - i] = new NetMask(IPv4Address.fillWithOnes(i + 1));
 
         _selectedNetMask = _subnetOptions[0];
+        _interfaceAddressBytes = NewIpInputs(_interfaceAddress);
+        foreach (var netMask in _subnetOptions)
+            _netMaskDropdownItems.Add(netMask, Item($"{netMask} / {netMask.PrefixLength}", netMask));
+        _netMaskDropdown = SelectDropDownList()
+            .Title("Subnet")
+            .WithItems(_netMaskDropdownItems.Values.ToArray()).OnItemSelected(item =>
+            {
+                if (item?.Value == null) return;
+                _selectedNetMask = (NetMask)item.Value;
+                SettingsChanged();
+            });
     }
 
     public UIToolView View
@@ -68,27 +78,12 @@ internal sealed class NetworkToolsGuiTool : IGuiTool
                         GridColumn.Stretch,
                         Stack()
                             .Vertical()
-                            .LargeSpacing()
-                            .WithChildren(
-                                Stack()
-                                    .Vertical()
-                                    .WithChildren(
-                                        SelectDropDownList()
-                                            .Title("Subnet")
-                                            .WithItems(
-                                                _subnetOptions.Select(mask =>
-                                                        Item($"{mask} / {mask.PrefixLength}", mask))
-                                                    .ToArray()
-                                            ).OnItemSelected(item =>
-                                            {
-                                                if (item?.Value != null)
-                                                {
-                                                    _selectedNetMask = (NetMask)item.Value;
-                                                    SettingsChanged();
-                                                }
-                                            })
-                                    ),
-                                NewIpInputs("Interface Address", _interfaceAddress)
+                            .MediumSpacing()
+                            .WithChildren(_netMaskDropdown,
+                                Stack().Horizontal().SmallSpacing().WithChildren([
+                                    Label().Text("Interface Address"),
+                                    .._interfaceAddressBytes
+                                ])
                             )
                     ),
                     Cell(GridRow.Results,
@@ -106,16 +101,32 @@ internal sealed class NetworkToolsGuiTool : IGuiTool
 
     public void OnDataReceived(string dataTypeName, object? parsedData)
     {
-        throw new NotImplementedException();
+        if (dataTypeName != IPv4DataTypeDetector.IpAddressDataTypeName)
+            throw new ArgumentException("Unsupported dataType", nameof(dataTypeName));
+
+        if (parsedData is not (NetMask netMask, InterfaceAddress ipAddress))
+            throw new ArgumentOutOfRangeException(nameof(parsedData));
+
+        if (_netMaskDropdownItems.ContainsKey(netMask))
+            return;
+
+        _selectedNetMask = netMask;
+        _interfaceAddress.Address = ipAddress.Address;
+
+        for (var i = 0; i < _interfaceAddressBytes.Length; i++)
+            _interfaceAddressBytes[i].Text(ipAddress.GetByte(3 - i).ToString());
+        if (_netMaskDropdownItems.TryGetValue(netMask, out var item))
+            _netMaskDropdown.Select(item);
+
+        SettingsChanged();
     }
 
-    private IUIElement NewIpInputs(string label, IIPAddress ipAddress)
+    private IUISingleLineTextInput[] NewIpInputs(IIPAddress ipAddress)
     {
-        var inputs = new IUIElement[5];
-        inputs[0] = Label().Text(label);
-        for (var i = 1; i < 5; i++)
+        var inputs = new IUISingleLineTextInput[4];
+        for (var i = 0; i < 4; i++)
         {
-            var byteIdx = 4 - i;
+            var byteIdx = 3 - i;
             inputs[i] = NumberInput().HideCommandBar().Step(1).Minimum(byte.MinValue)
                 .Maximum(byte.MaxValue)
                 .Value(ipAddress.GetByte(byteIdx))
@@ -126,7 +137,7 @@ internal sealed class NetworkToolsGuiTool : IGuiTool
                 });
         }
 
-        return Stack().Horizontal().SmallSpacing().WithChildren(inputs);
+        return inputs;
     }
 
     private void SettingsChanged()
