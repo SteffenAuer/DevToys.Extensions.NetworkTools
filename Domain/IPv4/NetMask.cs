@@ -1,13 +1,12 @@
 namespace Domain.IPv4;
 
-public class NetMask : IPv4Address<NetMask>
+public class NetMask(uint address) : IPv4Address(address)
 {
-    public NetMask(uint address) : base(address)
+    public NetMask() : this(0)
     {
-        PrefixLength = _calculatePrefixLength();
     }
 
-    public NetMask() : this(0)
+    public NetMask(IPv4Address address) : this(address.Address)
     {
     }
 
@@ -45,7 +44,7 @@ public class NetMask : IPv4Address<NetMask>
         Address = ~Address;
     }
 
-    public int PrefixLength { get; }
+    public int PrefixLength => _calculatePrefixLength();
 
     public int AddressCount => (int)Math.Pow(2, 32 - PrefixLength);
 
@@ -69,6 +68,6 @@ public class NetMask : IPv4Address<NetMask>
         ArgumentOutOfRangeException.ThrowIfGreaterThan(numberOfOnes, 32);
         ArgumentOutOfRangeException.ThrowIfNegative(numberOfOnes);
 
-        return new NetMask().fillWithOnes(32 - numberOfOnes);
+        return new NetMask(fillWithOnes(32 - numberOfOnes));
     }
 }

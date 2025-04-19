@@ -1,6 +1,6 @@
 namespace Domain.IPv4;
 
-public abstract class IPv4Address<T> : IIPAddress where T : IPv4Address<T>, new()
+public class IPv4Address : IIPAddress
 {
     protected IPv4Address() : this(0)
     {
@@ -42,12 +42,28 @@ public abstract class IPv4Address<T> : IIPAddress where T : IPv4Address<T>, new(
         Address |= (uint)value << (8 * position);
     }
 
+    public string ToBinaryString()
+    {
+        var bytes = new string[4];
+        for (var i = 0; i < 4; i++) bytes[i] = Convert.ToString(GetByte(i), 2);
+
+        return string.Join('.', bytes.Reverse());
+    }
+
+    public override string ToString()
+    {
+        var bytes = new byte[4];
+        for (var i = 0; i < 4; i++) bytes[i] = GetByte(i);
+
+        return string.Join('.', bytes.Reverse());
+    }
+
     /// <summary>
     ///     Expects a string in the format "x.x.x.x" where x is a number between 0 and 255.
     /// </summary>
     /// <param name="input">The correctly formatted IPv4 address as specified above</param>
     /// <returns>A new IPv4Address instance</returns>
-    public static T Parse(string input)
+    public static T Parse<T>(string input) where T : IPv4Address, new()
     {
         var byteStrings = input.Split('.');
         ArgumentOutOfRangeException.ThrowIfNotEqual(byteStrings.Length, 4);
@@ -61,25 +77,14 @@ public abstract class IPv4Address<T> : IIPAddress where T : IPv4Address<T>, new(
     /// </summary>
     /// <param name="count">The number of 1's to be inserted from the left</param>
     /// <returns>The new IPv4 address</returns>
-    public T fillWithOnes(int count)
+    public static IPv4Address fillWithOnes(int count)
     {
-        Address = (uint)((1L << count) - 1) << (32 - count);
-        return (T)this;
+        var addr = (uint)((1L << count) - 1) << (32 - count);
+        return new IPv4Address(addr);
     }
 
     private void ClearByte(int position)
     {
         Address &= ~(255u << (8 * position));
-    }
-
-    public override string ToString()
-    {
-        return $"{GetByte(3)}.{GetByte(2)}.{GetByte(1)}.{GetByte(0)}";
-    }
-
-    public string ToBinaryString()
-    {
-        return
-            $"{Convert.ToString(GetByte(3), 2).PadLeft(8, '0')}.{Convert.ToString(GetByte(2), 2).PadLeft(8, '0')}.{Convert.ToString(GetByte(1), 2).PadLeft(8, '0')}.{Convert.ToString(GetByte(0), 2).PadLeft(8, '0')}";
     }
 }

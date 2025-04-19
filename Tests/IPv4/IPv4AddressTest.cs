@@ -3,7 +3,7 @@ using Domain.IPv4;
 namespace Tests.IPv4;
 
 [TestFixture]
-[TestOf(typeof(IPv4Address<InterfaceAddress>))]
+[TestOf(typeof(IPv4Address))]
 public class IPv4AddressTest
 {
     [Test]
@@ -31,7 +31,7 @@ public class IPv4AddressTest
     [Test]
     public void TestFilledWithOnes()
     {
-        var addr = new InterfaceAddress().fillWithOnes(9);
+        var addr = IPv4Address.fillWithOnes(9);
         Assert.Multiple(() =>
         {
             Assert.That(addr.GetByte(3), Is.EqualTo(0xff));
@@ -46,8 +46,9 @@ public class IPv4AddressTest
     {
         Assert.Multiple(() =>
         {
-            Assert.That(InterfaceAddress.Parse("255.255.255.255").ToString(), Is.EqualTo("255.255.255.255"));
-            Assert.That(InterfaceAddress.Parse("128.0.0.0").ToString(), Is.EqualTo("128.0.0.0"));
+            Assert.That(IPv4Address.Parse<InterfaceAddress>("255.255.255.255").ToString(),
+                Is.EqualTo("255.255.255.255"));
+            Assert.That(IPv4Address.Parse<InterfaceAddress>("128.0.0.0").ToString(), Is.EqualTo("128.0.0.0"));
         });
     }
 
@@ -56,8 +57,8 @@ public class IPv4AddressTest
     {
         Assert.Multiple(() =>
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => InterfaceAddress.Parse("255.255.255"));
-            Assert.Throws<OverflowException>(() => InterfaceAddress.Parse("256.0.0.0"));
+            Assert.Throws<ArgumentOutOfRangeException>(() => IPv4Address.Parse<InterfaceAddress>("255.255.255"));
+            Assert.Throws<OverflowException>(() => IPv4Address.Parse<InterfaceAddress>("256.0.0.0"));
         });
     }
 }

@@ -13,7 +13,8 @@ public class BroadcastAddressTest
     [TestCase("31.4.2.166", "255.255.255.248", "31.4.2.167")]
     public void TestBroadcastAddressFromIpAndNetMask(string interfaceAddr, string netMask, string expected)
     {
-        var broadcastAddr = new BroadcastAddress(InterfaceAddress.Parse(interfaceAddr), NetMask.Parse(netMask));
+        var broadcastAddr = new BroadcastAddress(IPv4Address.Parse<InterfaceAddress>(interfaceAddr),
+            IPv4Address.Parse<NetMask>(netMask));
         Assert.That(broadcastAddr.ToString(), Is.EqualTo(expected));
     }
 }

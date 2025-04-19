@@ -1,6 +1,6 @@
 namespace Domain.IPv4;
 
-public class NetAddress(uint address) : IPv4Address<NetAddress>(address)
+public class NetAddress(uint address) : IPv4Address(address)
 {
     public NetAddress() : this(0)
     {

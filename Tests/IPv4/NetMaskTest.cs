@@ -13,7 +13,8 @@ public class NetMaskTest
     [TestCase("255.255.255.255", "255.255.255.254", "255.255.255.254")]
     public void TestNetMask(string interfaceAddr, string netAddress, string expected)
     {
-        var netMask = new NetMask(InterfaceAddress.Parse(interfaceAddr), NetAddress.Parse(netAddress));
+        var netMask = new NetMask(IPv4Address.Parse<InterfaceAddress>(interfaceAddr),
+            IPv4Address.Parse<NetAddress>(netAddress));
         Assert.That(netMask.ToString(), Is.EqualTo(expected));
     }
 
@@ -24,14 +25,15 @@ public class NetMaskTest
     [TestCase("31.4.2.166", "31.4.2.167 ", "255.255.255.248")]
     public void TestNetMaskFromIpAndBroadcast(string interfaceAddr, string broadcastAddr, string expected)
     {
-        var netMask = new NetMask(InterfaceAddress.Parse(interfaceAddr), BroadcastAddress.Parse(broadcastAddr));
+        var netMask = new NetMask(IPv4Address.Parse<InterfaceAddress>(interfaceAddr),
+            IPv4Address.Parse<BroadcastAddress>(broadcastAddr));
         Assert.That(netMask.ToString(), Is.EqualTo(expected));
     }
 
     [Test]
     public void Test()
     {
-        Assert.That(new NetMask(0xff_ff_ff_ff).fillWithOnes(32).ToString(), Is.EqualTo("255.255.255.255"));
+        Assert.That(new NetMask(IPv4Address.fillWithOnes(32)).ToString(), Is.EqualTo("255.255.255.255"));
     }
 
     [Test]
@@ -50,7 +52,7 @@ public class NetMaskTest
     [TestCase("255.255.0.0", 16)]
     public void TestPrefixLength(string netMask, int expectedPrefixLength)
     {
-        var netMaskObj = NetMask.Parse(netMask);
+        var netMaskObj = IPv4Address.Parse<NetMask>(netMask);
         Assert.That(netMaskObj.PrefixLength, Is.EqualTo(expectedPrefixLength));
     }
 }

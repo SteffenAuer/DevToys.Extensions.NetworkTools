@@ -1,6 +1,6 @@
 namespace Domain.IPv4;
 
-public class BroadcastAddress(uint address) : IPv4Address<BroadcastAddress>(address)
+public class BroadcastAddress(uint address) : IPv4Address(address)
 {
     public BroadcastAddress() : this(0xff_ff_ff_ff)
     {

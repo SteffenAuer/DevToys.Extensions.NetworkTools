@@ -43,7 +43,7 @@ internal sealed class NetworkToolsGuiTool : IGuiTool
     {
         for (var i = 0; i < 32; i++)
         {
-            var mask = new NetMask().fillWithOnes(i + 1);
+            var mask = new NetMask(IPv4Address.fillWithOnes(i + 1));
             _subnetOptions[31 - i] = mask;
             _addressCounts[i] = mask.AddressCount;
         }
