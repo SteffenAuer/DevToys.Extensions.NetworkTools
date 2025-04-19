@@ -1,4 +1,4 @@
-namespace Utils;
+namespace Domain.IPv4;
 
 public abstract class IPv4Address<T> : IIPAddress where T : IPv4Address<T>, new()
 {

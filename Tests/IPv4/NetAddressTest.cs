@@ -1,6 +1,6 @@
-using Utils;
+using Domain.IPv4;
 
-namespace Tests;
+namespace Tests.IPv4;
 
 [TestFixture]
 [TestOf(typeof(NetAddress))]

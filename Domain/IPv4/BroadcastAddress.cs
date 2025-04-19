@@ -1,4 +1,4 @@
-namespace Utils;
+namespace Domain.IPv4;
 
 public class BroadcastAddress(uint address) : IPv4Address<BroadcastAddress>(address)
 {

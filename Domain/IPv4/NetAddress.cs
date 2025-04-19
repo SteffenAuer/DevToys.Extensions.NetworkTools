@@ -1,4 +1,4 @@
-namespace Utils;
+namespace Domain.IPv4;
 
 public class NetAddress(uint address) : IPv4Address<NetAddress>(address)
 {

@@ -1,6 +1,6 @@
-using Utils;
+using Domain.IPv4;
 
-namespace Tests;
+namespace Tests.IPv4;
 
 [TestFixture]
 [TestOf(typeof(NetMask))]
@@ -44,5 +44,13 @@ public class NetMaskTest
     {
         var netMask = NetMask.FromAddressCount(addrCount);
         Assert.That(netMask.ToString(), Is.EqualTo(expected));
+    }
+
+    [Test]
+    [TestCase("255.255.0.0", 16)]
+    public void TestPrefixLength(string netMask, int expectedPrefixLength)
+    {
+        var netMaskObj = NetMask.Parse(netMask);
+        Assert.That(netMaskObj.PrefixLength, Is.EqualTo(expectedPrefixLength));
     }
 }

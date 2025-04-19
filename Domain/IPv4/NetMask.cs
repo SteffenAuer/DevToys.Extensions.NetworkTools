@@ -1,7 +1,12 @@
-namespace Utils;
+namespace Domain.IPv4;
 
-public class NetMask(uint address) : IPv4Address<NetMask>(address)
+public class NetMask : IPv4Address<NetMask>
 {
+    public NetMask(uint address) : base(address)
+    {
+        PrefixLength = _calculatePrefixLength();
+    }
+
     public NetMask() : this(0)
     {
     }
@@ -40,24 +45,23 @@ public class NetMask(uint address) : IPv4Address<NetMask>(address)
         Address = ~Address;
     }
 
-    public int PrefixLength
-    {
-        get
-        {
-            var count = 0;
-            for (var i = 31; i >= 0; i--)
-            {
-                var mask = 1u << i;
-                var masked = Address & mask;
-                if (masked == 0) break;
-                count++;
-            }
-
-            return count;
-        }
-    }
+    public int PrefixLength { get; }
 
     public int AddressCount => (int)Math.Pow(2, 32 - PrefixLength);
+
+    private int _calculatePrefixLength()
+    {
+        var count = 0;
+        for (var i = 31; i >= 0; i--)
+        {
+            var mask = 1u << i;
+            var masked = Address & mask;
+            if (masked == 0) break;
+            count++;
+        }
+
+        return count;
+    }
 
     public static NetMask FromAddressCount(int addressCount)
     {

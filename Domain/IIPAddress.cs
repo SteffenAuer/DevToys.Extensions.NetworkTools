@@ -1,4 +1,4 @@
-namespace Utils;
+namespace Domain;
 
 public interface IIPAddress
 {

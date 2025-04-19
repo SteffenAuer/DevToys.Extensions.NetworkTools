@@ -1,6 +1,7 @@
 using System.ComponentModel.Composition;
 using DevToys.Api;
-using Utils;
+using Domain;
+using Domain.IPv4;
 using static DevToys.Api.GUI;
 
 namespace NetworkTools;
