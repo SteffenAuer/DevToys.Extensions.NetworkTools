@@ -58,6 +58,11 @@ public class IPv4Address : IIPAddress
         return string.Join('.', bytes.Reverse());
     }
 
+    public IPv4Address Inverted()
+    {
+        return new IPv4Address(~Address);
+    }
+
     /// <summary>
     ///     Expects a string in the format "x.x.x.x" where x is a number between 0 and 255.
     /// </summary>

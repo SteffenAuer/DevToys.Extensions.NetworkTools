@@ -27,6 +27,9 @@ internal sealed class IpCalcToolGui : IGuiTool
 
     private readonly Dictionary<NetMask, IUIDropDownListItem> _netMaskDropdownItems = new();
 
+    private readonly IUIMultiLineTextInput _outputBinaryCalculation =
+        MultiLineTextInput().ReadOnly().Title("Binary Calculation");
+
     private readonly IUISingleLineTextInput _outputBroadcastAddress =
         SingleLineTextInput().ReadOnly().Title("Broadcast Address");
 
@@ -69,7 +72,8 @@ internal sealed class IpCalcToolGui : IGuiTool
                 .RowLargeSpacing()
                 .Rows(
                     (GridRow.Settings, Auto),
-                    (GridRow.Results, new UIGridLength(1, UIGridUnitType.Fraction)))
+                    (GridRow.Results, new UIGridLength(1, UIGridUnitType.Fraction)),
+                    (GridRow.Calculation, new UIGridLength(1, UIGridUnitType.Fraction)))
                 .Columns(
                     (GridColumn.Stretch, new UIGridLength(1, UIGridUnitType.Fraction)))
                 .Cells(
@@ -96,6 +100,11 @@ internal sealed class IpCalcToolGui : IGuiTool
                                 _outputNumberOfAddresses,
                                 _outputNumberOfHosts
                             )
+                    ),
+                    Cell(
+                        GridRow.Calculation,
+                        GridColumn.Stretch,
+                        _outputBinaryCalculation
                     )
                 ));
 
@@ -148,6 +157,17 @@ internal sealed class IpCalcToolGui : IGuiTool
         _outputNetAddress.Text(netAddr.ToString());
         _outputNumberOfAddresses.Text(_selectedNetMask.AddressCount.ToString());
         _outputNumberOfHosts.Text((_selectedNetMask.AddressCount - 2).ToString());
+        _outputBinaryCalculation.Text("Broadcast Address\n" +
+                                      $"    {_interfaceAddress.ToBinaryString()} === Interface Address\n" +
+                                      $"  | {_selectedNetMask.Inverted().ToBinaryString()} === Inverted Net Mask\n" +
+                                      $"  {string.Concat(Enumerable.Repeat('_', 2 + 4 * 8 + 3))}\n" +
+                                      $"    {broadcast.ToBinaryString()} === Broadcast Address\n" +
+                                      "\nNetwork Address\n" +
+                                      $"    {_interfaceAddress.ToBinaryString()} === Interface Address\n" +
+                                      $"  & {_selectedNetMask.ToBinaryString()} === Net Mask\n" +
+                                      $"  {string.Concat(Enumerable.Repeat('_', 2 + 4 * 8 + 3))}\n" +
+                                      $"    {netAddr.ToBinaryString()} === Network Address"
+        );
     }
 
     private enum GridColumn
@@ -158,6 +178,7 @@ internal sealed class IpCalcToolGui : IGuiTool
     private enum GridRow
     {
         Settings,
-        Results
+        Results,
+        Calculation
     }
 }
