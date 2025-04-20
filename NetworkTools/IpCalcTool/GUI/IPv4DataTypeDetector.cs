@@ -14,7 +14,6 @@ internal sealed class IPv4DataTypeDetector : IDataTypeDetector
         DataDetectionResult? resultFromBaseDetector,
         CancellationToken cancellationToken)
     {
-        Console.WriteLine(resultFromBaseDetector?.Data);
         if (resultFromBaseDetector?.Data is not string dataString)
             return ValueTask.FromResult(DataDetectionResult.Unsuccessful);
 
