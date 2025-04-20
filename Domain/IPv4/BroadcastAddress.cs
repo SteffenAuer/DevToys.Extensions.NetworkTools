@@ -11,8 +11,8 @@ public class BroadcastAddress(uint address) : IPv4Address(address)
     {
     }
 
-    public BroadcastAddress(InterfaceAddress interfaceAddress, NetAddress netAddress) : this(interfaceAddress,
-        new NetMask(interfaceAddress, netAddress))
+    public BroadcastAddress(InterfaceAddress interfaceAddress, NetworkAddress networkAddress) : this(interfaceAddress,
+        new NetMask(interfaceAddress, networkAddress))
     {
     }
 }

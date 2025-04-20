@@ -7,27 +7,35 @@ namespace Tests.IPv4;
 public class NetMaskTest
 {
     [Test]
-    // [TestCase("17.8.7.8", "17.8.0.0", "255.255.0.0")]
+    [TestCase("17.8.7.8", "17.8.0.0", "255.255.0.0")]
     [TestCase("17.7.177.4", "17.7.160.0", "255.255.224.0")]
-    // [TestCase("144.3.133.1", "144.3.128.0", "255.255.192.0")]
+    [TestCase("144.3.133.1", "144.3.128.0", "255.255.192.0")]
     [TestCase("255.255.255.255", "255.255.255.254", "255.255.255.254")]
     public void TestNetMask(string interfaceAddr, string netAddress, string expected)
     {
         var netMask = new NetMask(IPv4Address.Parse<InterfaceAddress>(interfaceAddr),
-            IPv4Address.Parse<NetAddress>(netAddress));
+            IPv4Address.Parse<NetworkAddress>(netAddress));
         Assert.That(netMask.ToString(), Is.EqualTo(expected));
     }
 
     [Test]
     [TestCase("17.8.7.8", "17.8.255.255", "255.255.0.0")]
-    // [TestCase("11.7.177.4", "11.7.191.255", "255.255.224.0")]
+    [TestCase("11.7.177.4", "11.7.191.255", "255.255.224.0")]
     [TestCase("144.3.133.1", "144.3.191.255", "255.255.192.0")]
     [TestCase("31.4.2.166", "31.4.2.167 ", "255.255.255.248")]
     public void TestNetMaskFromIpAndBroadcast(string interfaceAddr, string broadcastAddr, string expected)
     {
-        var netMask = new NetMask(IPv4Address.Parse<InterfaceAddress>(interfaceAddr),
-            IPv4Address.Parse<BroadcastAddress>(broadcastAddr));
+        var iAddr = IPv4Address.Parse<InterfaceAddress>(interfaceAddr);
+        var bAddr = IPv4Address.Parse<BroadcastAddress>(broadcastAddr);
+        Console.WriteLine(iAddr.ToBinaryString());
+        Console.WriteLine(bAddr.ToBinaryString());
+        var netMask = new NetMask(iAddr, bAddr);
         Assert.That(netMask.ToString(), Is.EqualTo(expected));
+
+        // var masks = NetMask.PossibleNetMasks(IPv4Address.Parse<InterfaceAddress>(interfaceAddr),
+        //     IPv4Address.Parse<BroadcastAddress>(broadcastAddr));
+        //
+        // Assert.That(masks.Where(x => x.ToString() == expected), Is.True);
     }
 
     [Test]

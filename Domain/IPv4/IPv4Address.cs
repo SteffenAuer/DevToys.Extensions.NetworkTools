@@ -45,7 +45,7 @@ public class IPv4Address : IIPAddress
     public string ToBinaryString()
     {
         var bytes = new string[4];
-        for (var i = 0; i < 4; i++) bytes[i] = Convert.ToString(GetByte(i), 2);
+        for (var i = 0; i < 4; i++) bytes[i] = Convert.ToString(GetByte(i), 2).PadLeft(8, '0');
 
         return string.Join('.', bytes.Reverse());
     }

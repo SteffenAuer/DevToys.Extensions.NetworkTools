@@ -10,7 +10,7 @@ public class NetMask(uint address) : IPv4Address(address)
     {
     }
 
-    public NetMask(InterfaceAddress interfaceAddress, NetAddress netAddress) :
+    public NetMask(InterfaceAddress interfaceAddress, NetworkAddress networkAddress) :
         this(0)
     {
         // Go bit by bit from left to right. The first bit where the interface address is different from the net address
@@ -19,7 +19,7 @@ public class NetMask(uint address) : IPv4Address(address)
         {
             var mask = 1u << i;
             var interfaceMasked = interfaceAddress.Address & mask;
-            var netMasked = netAddress.Address & mask;
+            var netMasked = networkAddress.Address & mask;
 
             if (interfaceMasked != netMasked) break;
             Address |= mask;
@@ -29,24 +29,22 @@ public class NetMask(uint address) : IPv4Address(address)
     public NetMask(InterfaceAddress interfaceAddress, BroadcastAddress broadcastAddress) :
         this(0)
     {
-        // Go bit by bit from right to left. The first bit that is different between the interface address
-        // and the broadcast address is the end of the inverted netmask.
-        for (var i = 0; i < 32; i++)
+        // Go bit by bit from left to right. The first bit where the interface address is different from the broadcast address
+        // marks the end of the netmask.
+        for (var i = 31; i >= 0; i--)
         {
             var mask = 1u << i;
             var interfaceMasked = interfaceAddress.Address & mask;
-            var netMasked = broadcastAddress.Address & mask;
+            var broadcastMasked = broadcastAddress.Address & mask;
 
-            if (interfaceMasked == 0 && netMasked == 0) break;
+            if (interfaceMasked != broadcastMasked) break;
             Address |= mask;
         }
-
-        Address = ~Address;
     }
 
     public int PrefixLength => _calculatePrefixLength();
 
-    public long AddressCount => 1L << (32 - PrefixLength);
+    public long AddressCount => 1L << (32 - PrefixLength); // equiv to 2^(32 - PrefixLength)
 
     public static NetMask FromPrefixLength(int prefix)
     {

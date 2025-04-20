@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="DevToys.Api" Version="2.0.8-preview"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="NetworkToolsGroupStrings.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="IpCalcTool\IpCalcToolStrings.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>IpCalcToolStrings.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="NetworkToolsGroupStrings.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>NetworkToolsGroupStrings.resx</DependentUpon>
+        </Compile>
+        <Compile Update="IpCalcTool\IpCalcToolStrings.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>IpCalcToolStrings.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Domain\Domain.csproj"/>
+    </ItemGroup>
+
+</Project>

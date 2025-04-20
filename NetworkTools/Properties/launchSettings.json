@@ -11,7 +11,7 @@
     "DevToys CLI": {
       "commandName": "Executable",
       "executablePath": "%DevToysCliDebugEntryPoint%",
-      "commandLineArgs": "",
+      "commandLineArgs": "ipcalc -ip \"192.168.178.74\" -nm 16",
       "environmentVariables": {
         "EXTRAPLUGIN": "$(TargetDir)"
       }

@@ -4,22 +4,22 @@ using Domain;
 using Domain.IPv4;
 using static DevToys.Api.GUI;
 
-namespace NetworkTools;
+namespace NetworkTools.IpCalcTool.GUI;
 
 [Export(typeof(IGuiTool))]
-[Name("NetworkTools")]
+[Name("IpCalcTool")]
 [ToolDisplayInformation(
     IconFontName = "FluentSystemIcons",
-    IconGlyph = '\uE670',
-    GroupName = PredefinedCommonToolGroupNames.Converters,
-    ResourceManagerAssemblyIdentifier = nameof(MyNetworkToolsResourceAssemblyIdentifier),
-    ResourceManagerBaseName = "NetworkTools.NetworkToolsGui",
-    ShortDisplayTitleResourceName = nameof(NetworkTools.ShortDisplayTitle),
-    LongDisplayTitleResourceName = nameof(NetworkTools.LongDisplayTitle),
-    DescriptionResourceName = nameof(NetworkTools.Description),
-    AccessibleNameResourceName = nameof(NetworkTools.AccessibleName))]
+    IconGlyph = '\uF562',
+    GroupName = "Network Tools",
+    ResourceManagerAssemblyIdentifier = nameof(IpCalcToolResourceAssemblyIdentifier),
+    ResourceManagerBaseName = "NetworkTools.IpCalcTool.IpCalcToolStrings",
+    ShortDisplayTitleResourceName = nameof(IpCalcToolStrings.ShortDisplayTitle),
+    LongDisplayTitleResourceName = nameof(IpCalcToolStrings.LongDisplayTitle),
+    DescriptionResourceName = nameof(IpCalcToolStrings.Description),
+    AccessibleNameResourceName = nameof(IpCalcToolStrings.AccessibleName))]
 [AcceptedDataTypeName(IPv4DataTypeDetector.IpAddressDataTypeName)]
-internal sealed class NetworkToolsGuiTool : IGuiTool
+internal sealed class IpCalcToolGui : IGuiTool
 {
     private readonly InterfaceAddress _interfaceAddress = new();
     private readonly IUISingleLineTextInput[] _interfaceAddressBytes = new IUISingleLineTextInput[4];
@@ -43,7 +43,7 @@ internal sealed class NetworkToolsGuiTool : IGuiTool
 
     private NetMask _selectedNetMask;
 
-    public NetworkToolsGuiTool()
+    public IpCalcToolGui()
     {
         for (var i = 0; i < 32; i++) _subnetOptions[31 - i] = new NetMask(IPv4Address.fillWithOnes(i + 1));
 
@@ -143,7 +143,7 @@ internal sealed class NetworkToolsGuiTool : IGuiTool
     private void SettingsChanged()
     {
         var broadcast = new BroadcastAddress(_interfaceAddress, _selectedNetMask);
-        var netAddr = new NetAddress(_interfaceAddress, _selectedNetMask);
+        var netAddr = new NetworkAddress(_interfaceAddress, _selectedNetMask);
         _outputBroadcastAddress.Text(broadcast.ToString());
         _outputNetAddress.Text(netAddr.ToString());
         _outputNumberOfAddresses.Text(_selectedNetMask.AddressCount.ToString());

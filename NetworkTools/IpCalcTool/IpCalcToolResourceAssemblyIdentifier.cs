@@ -1,11 +1,11 @@
-using DevToys.Api;
 using System.ComponentModel.Composition;
+using DevToys.Api;
 
-namespace NetworkTools;
+namespace NetworkTools.IpCalcTool;
 
 [Export(typeof(IResourceAssemblyIdentifier))]
-[Name(nameof(MyNetworkToolsResourceAssemblyIdentifier))]
-internal sealed class MyNetworkToolsResourceAssemblyIdentifier : IResourceAssemblyIdentifier
+[Name(nameof(IpCalcToolResourceAssemblyIdentifier))]
+internal sealed class IpCalcToolResourceAssemblyIdentifier : IResourceAssemblyIdentifier
 {
     public ValueTask<FontDefinition[]> GetFontDefinitionsAsync()
     {
