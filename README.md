@@ -4,7 +4,8 @@ Currently, this tool only provides an IP address calculator, i.e. with a given s
 This is my first extension for DevToys and also my first .NET/C# project, so please be kind to me ;).
 
 ## Installation
-Downlaod the nuget package either from 
+1. Downlaod the nuget package from here: https://github.com/SteffenAuer/DevToys.Extensions.NetworkTools/pkgs/nuget/NetworkTools
+2. Follow instructions in DevToys app on how to install it.
 
 ### Future Plans
 - IPv6 support
