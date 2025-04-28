@@ -8,7 +8,7 @@ This is my first extension for DevToys and also my first .NET/C# project, so ple
 ## Installation
 
 1. Downlaod the nuget package from
-   here: https://github.com/SteffenAuer/DevToys.Extensions.NetworkTools/pkgs/nuget/NetworkTools
+   here: https://github.com/users/SteffenAuer/packages/nuget/package/DevToys.Extensions.NetworkTools
 2. Follow instructions in DevToys app on how to install it.
 
 ## Impressions
